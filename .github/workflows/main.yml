@@ -1,0 +1,27 @@
+name: seedly-frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: git library
+        uses: actions/checkout@v4
+      - name: connection
+        uses: appleboy/ssh-action@v1.2.0
+
+        with:
+          host: ${{secrets.IP}}
+          username: ${{secrets.USERNAME}}
+          password: ${{secrets.PASSWORD}}
+            script:|
+              cd /home/pratishtha/seedlyfrntd
+              git pull origin
+              sudo npm i 
+              sudo npm run build || true
+              pm2 start npm --name "seedlyfrntd" --rundev
